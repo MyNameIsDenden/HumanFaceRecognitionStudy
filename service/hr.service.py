@@ -104,4 +104,71 @@ def get_day_report(date):
 
     for emp in o.EMPLOYEES:
         if emp.name in o.LOCK_RECORD.keys():
+            emp_lock_list = o.LOCK_RECORD.get(emp.name)
+            is_absent = True
+            for lock_time_str in emp_lock_list:
+                lock_time = datetime.datetime.strptime(lock_time_str, "%Y-%m-%d %H:%M:%S")
+                if earliest_time < lock_time < latest_time:
+                    is_absent = False
+                    if work_time < lock_time <= noon_time:
+                        late_list.append(emp.name)
+                    if noon_time < lock_time < closing_time:
+                        left_early.append(emp.name)
+            if is_absent:
+                absent_list.append(emp.name)
+        else:
+            absent_list.append(emp.name)
+
+    emp_count = len(o.EMPLOYEES)
+    print("---------" + date + "-----------")
+    print("应到人数:" + str(emp_count))
+    print("缺勤人数:" + str(len(absent_list)))
+    absent_name = ""
+    if len(absent_list) == 0:
+        absent_name = "(空)"
+    else:
+        for name in absent_list:
+            absent_name += name + " "
+    print("缺勤名单:" + absent_name)
+    print("迟到人数:" + str(len(late_list)))
+    late_name = ""
+    if len(late_list) == 0:
+        late_name += "(空)"
+    else:
+        for name in late_list:
+            late_name += name + " "
+    print("迟到名单:" + late_name)
+
+    print("早退人数:" + str(len(left_early)))
+    early_name = ""
+    if len(left_early) == 0:
+        early_name += "(空)"
+    else:
+        for name in left_early:
+            early_name += name + " "
+    print("早退名单:" + early_name)
+
+def get_today_report():
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
+    get_day_report(str(date))
+
             
+def get_month_report(month):
+    io.load_work_time_config()
+    date = datetime.datetime.strptime(month, "%Y-%m")
+    monthRange = calendar.monthrange(date.year, date.month)[1]
+    month_first_day = datetime.date(date.year, date.month, 1)
+    month_last_day = datetime.date(date.year, date.month, monthRange)
+
+    clock_in = "I"
+    clock_out = "O"
+    late = "L"
+    left_early = "E"
+    absent = "A"
+
+    lock_report = dict()
+
+    for emp in o.EMPLOYEES:
+        emp_lock_data = []
+        
+
