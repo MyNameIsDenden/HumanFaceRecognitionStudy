@@ -148,6 +148,7 @@ def get_day_report(date):
             early_name += name + " "
     print("早退名单:" + early_name)
 
+
 def get_today_report():
     date = datetime.datetime.now().strftime("%Y-%m-%d")
     get_day_report(str(date))
@@ -236,9 +237,22 @@ def get_month_report(month):
     file_name = title_date + "考勤月报"
     io.create_CSV(file_name, report)
 
+
 def get_pre_month_report():
     today = datetime.date.today()
     pre_month_first_day = datetime.date(today.year, today.month-1, 1)
     pre_month = pre_month_first_day.strftime("%Y-%m")
     get_month_report(pre_month)
 
+
+
+# 获取所有员工的打卡记录信息
+def get_record_all():
+    record = o.LOCK_RECORD  # 获得打卡记录字典
+    report = ""  # 报表内容
+    for name in record.keys():  # 遍历所有名字
+        report += "-----------------------------------\n"
+        report += name + "  打卡记录如下：\n"
+        for date in record[name]:  # 遍历所有时间字符串
+            report += date + "\n"
+    return report

@@ -1,7 +1,7 @@
 import cv2
 from util import public_tools as tool
 from util import io_tools as io
-from service import recoginze_service as rs
+from service import recognize_service as rs
 from service import hr_service as hr
 
 ESC_KEY = 27
@@ -37,8 +37,8 @@ def clock_in():
         cv2.imshow("check in ", frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if rs.found_face(gray):
-            gary = cv2.resize(gray, (io.IMG_WIDTH, io.IMG_HEIGHT))
-            code = rs.recognise_face(gray)
+            gray = cv2.resize(gray, (io.IMG_WIDTH, io.IMG_HEIGHT))
+            code = rs.recognise_faces(gray)
             if code != -1:
                 name = hr.get_name_with_code(code)
                 if name != None:

@@ -10,7 +10,7 @@ PIC_PATH = PATH + "faces\\"
 DATA_FILE = PATH + "employee_data.txt"
 WORK_TIME = PATH + "work_time.txt"
 USER_PASSWORD = PATH + "user_password.txt"
-RECORD_FILE = PATH + "lock_recode.txt"
+RECORD_FILE = PATH + "lock_record.txt"
 IMG_WIDTH = 640
 IMG_HEIGHT = 480
 
@@ -38,7 +38,7 @@ def checking_data_files():
         print("员工信息文件丢失， 已重新创建:" + DATA_FILE)
     if not os.path.exists(RECORD_FILE):
         open(RECORD_FILE, "a+")
-        print("打卡记录文件丢失, 已重新创建:", + RECORD_FILE)
+        print("打卡记录文件丢失, 已重新创建:" + RECORD_FILE)
     if not os.path.exists(USER_PASSWORD):
         file = open(USER_PASSWORD, "a+", encoding="utf-8")
         user = dict()
@@ -57,7 +57,7 @@ def load_employee_info():
     max_id = 1
     file = open(DATA_FILE, "r", encoding="utf-8")
     for line in file.readlines():
-        id, name, code = line.rstrip().split(".")
+        id, name, code = line.rstrip().split(",")
         o.add(o.Employee(id, name, code))
         if int(id) > max_id:
             max_id = int(id)
@@ -82,7 +82,7 @@ def load_employee_pic():
         for file_name in pics:
             code = file_name[0:o.CODE_LEN]
             photos.append(cv2.imread(PIC_PATH + file_name, 0))
-            labels.append(str(code))
+            labels.append(int(code))
         rs.train(photos, labels)
     else:
         print("Error >> 员工照片文件丢失， 请重新启动程序并录入员工信息!")
