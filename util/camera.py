@@ -34,18 +34,21 @@ def clock_in():
     cameraCapture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     success, frame = cameraCapture.read()
     while success and cv2.waitKey(-1) == -1:
-        cv2.imshow("check in ", frame)
+        cv2.imshow("checkin ", frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if rs.found_face(gray):
             gray = cv2.resize(gray, (io.IMG_WIDTH, io.IMG_HEIGHT))
             code = rs.recognise_faces(gray)
+            print("code:"+str(code))
             if code != -1:
                 name = hr.get_name_with_code(code)
+                print("name:"+str(name))
                 if name != None:
                     cv2.destroyAllWindows()
                     cameraCapture.release()
                     return name
 
         success, frame = cameraCapture.read()
+    cv2.waitKey(-1)
     cv2.destroyAllWindows()
     cameraCapture.release()

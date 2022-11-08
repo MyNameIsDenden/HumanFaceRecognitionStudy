@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 RECOGINZER = cv2.face.LBPHFaceRecognizer_create()
-PASS_CONF = 45
+PASS_CONF = 50
 FACE_CASCADE = cv2.CascadeClassifier(os.getcwd() + "\\cascades\\haarcascade_frontalface_default.xml")
 
 
@@ -18,6 +18,7 @@ def found_face(gary_img):
 
 def recognise_faces(photos):
     label, confidence = RECOGINZER.predict(photos)
-    if confidence > PASS_CONF:
+    print("cc==:"+str(confidence))
+    if confidence > 60:
         return -1
     return label

@@ -67,7 +67,8 @@ def check_id(id):
 
 def get_name_with_code(code):
     for emp in o.EMPLOYEES:
-        if emp.code == code:
+        print(emp.name+str(emp.code))
+        if str(emp.code) == str(code):
             return emp.name
 
 
